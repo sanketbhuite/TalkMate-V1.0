@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TalkMate - Live Voice Tutor</title>
+  <style>
+    body { font-family: Arial; padding: 2rem; background: #f2f2f2; }
+    #messages { margin-top: 2rem; }
+    .box { background: #fff; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    .me { font-weight: bold; color: #2c3e50; }
+    .talkmate { color: #27ae60; }
+    .correction { color: #c0392b; margin-top: 0.5rem; }
+    .tip { font-style: italic; color: #2980b9; }
+  </style>
+</head>
+<body>
+  <h1>🎙️ TalkMate: Live English Tutor</h1>
+  <button id="record">🎤 Start Talking</button>
+
+  <div id="messages"></div>
+
+  <script>
+    const recordBtn = document.getElementById("record");
+    const messages = document.getElementById("messages");
+
+    const synth = window.speechSynthesis;
+
+    recordBtn.addEventListener("click", () => {
+if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+  alert('Your browser does not support the Web Speech API. Try Chrome or Edge.');
+}
+
+navigator.mediaDevices.getUserMedia({ audio: true })
+  .then(() => console.log('🎤 Mic permission granted'))
+  .catch(err => console.error('Mic permission DENIED at OS/browser level:', err));
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.start();
+
+      recordBtn.innerText = "🎙️ Listening...";
+      recognition.onresult = async (event) => {
+        const userText = event.results[0][0].transcript;
+        addMessage("You", userText);
+
+        const res = await fetch("/process", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: userText })
+        });
+
+        const data = await res.json();
+        addMessage("TalkMate", data.reply, data.corrections, data.tip);
+        speak(data.reply);
+
+        recordBtn.innerText = "🎤 Start Talking";
+      };
+
+      recognition.onerror = () => {
+        alert("Mic error or permission denied.");
+        recordBtn.innerText = "🎤 Start Talking";
+      };
+    });
+
+    function addMessage(speaker, text, correction = "", tip = "") {
+      const div = document.createElement("div");
+      div.className = "box";
+      div.innerHTML = `<div class="${speaker === 'You' ? 'me' : 'talkmate'}">${speaker}: ${text}</div>`;
+      if (correction) div.innerHTML += `<div class="correction">✍️ Correction: ${correction}</div>`;
+      if (tip) div.innerHTML += `<div class="tip">💡 Tip: ${tip}</div>`;
+      messages.prepend(div);
+    }
+
+    function speak(text) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-US';
+      synth.speak(utter);
+    }
+  </script>
+</body>
+</html>
