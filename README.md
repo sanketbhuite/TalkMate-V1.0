@@ -33,7 +33,7 @@ TalkMate/
 
 ### 1. 📥 Clone the repo
 ```bash
-git clone https://github.com/your-username/TalkMate.git
+git clone https://github.com/sanketbhuite/TalkMate.git
 cd TalkMate
 ```
 
