@@ -1,4 +1,4 @@
-# 🎙️ TalkMate v1.5 – Friendly AI English Tutor
+# 🎙️ TalkMate v1.0 – Friendly AI English Tutor
 
 **TalkMate** is a web-based virtual English tutor that helps users improve their spoken English by having natural conversations. It listens to your speech, corrects mistakes, gives grammar tips, and replies like a real friend.
 
@@ -19,10 +19,12 @@
 ```
 TalkMate/
 ├── static/
-│   └── style.css           # Styling (optional)
+│   └── logoimg.png
+│   └── style.css          # Styling (optional)
 ├── templates/
 │   └── index.html          # Frontend HTML + JS
 ├── app.py                  # Flask backend logic
+├── utils.py                  # Flask backend logic
 ├── requirements.txt        # Python dependencies
 └── README.md               # This file
 ```
@@ -33,7 +35,7 @@ TalkMate/
 
 ### 1. 📥 Clone the repo
 ```bash
-git clone https://github.com/sanketbhuite/TalkMate-v1.5.git
+git clone https://github.com/sanketbhuite/TalkMate-v1.0.git
 cd TalkMate
 ```
 
@@ -97,10 +99,9 @@ TalkMate is created with ❤️ by **Sanket Shivaji Bhuite**, a passionate Compu
 
 ## 🚧 Next Version (v2.0 Sneak Peek)
 
-- 🔁 Continuous speech recognition (like a phone call)
 - 🧠 Full conversation memory
 - 🗣️ More natural, flowing dialogue
-- 🧍 Real-time loop without pressing the button
+- conversation pdf at end
 
 ---
 
